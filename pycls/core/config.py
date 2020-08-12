@@ -42,6 +42,17 @@ _C.MODEL.LOSS_FUN = "cross_entropy"
 
 
 # ------------------------------------------------------------------------------------ #
+# ShuffleNet options
+# ------------------------------------------------------------------------------------ #
+_C.SHUFFLENET = CfgNode()
+
+# ShuffleNet model size (0.5x, 1.0x, 1.5x, 2.0x)
+_C.SHUFFLENET.MODEL_SIZE = "1.0x"
+
+# Block function (see pycls/models/shufflenet.py for options)
+_C.SHUFFLENET.BLOCK_FUN = "shufflenet"
+
+# ------------------------------------------------------------------------------------ #
 # ResNet options
 # ------------------------------------------------------------------------------------ #
 _C.RESNET = CfgNode()

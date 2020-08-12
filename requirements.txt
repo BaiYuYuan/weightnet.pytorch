@@ -6,4 +6,5 @@ opencv-python
 parameterized
 setuptools
 simplejson
+termcolor
 yacs

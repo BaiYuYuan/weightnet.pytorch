@@ -16,6 +16,7 @@ import sys
 import pycls.core.distributed as dist
 import simplejson
 from pycls.core.config import cfg
+from termcolor import colored
 
 
 # Show filename and line number in logs
@@ -44,20 +45,30 @@ def setup_logging():
     """Sets up the logging."""
     # Enable logging only for the master process
     if dist.is_master_proc():
-        # Clear the root logger to prevent any existing logging config
-        # (e.g. set by another module) from messing with our setup
-        logging.root.handlers = []
-        # Construct logging configuration
-        logging_config = {"level": logging.INFO, "format": _FORMAT}
-        # Log either to stdout or to a file
-        if cfg.LOG_DEST == "stdout":
-            logging_config["stream"] = sys.stdout
-        else:
-            logging_config["filename"] = os.path.join(cfg.OUT_DIR, _LOG_FILE)
-        # Configure logging
-        logging.basicConfig(**logging_config)
-    else:
-        _suppress_print()
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format=colored("[%(asctime)s]", "green") + "  %(message)s",
+            datefmt="%m/%d %H:%M:%S",
+            handlers=[
+                logging.FileHandler(os.path.join(cfg.OUT_DIR, cfg.LOG_DEST)),
+                logging.StreamHandler(),
+            ],
+        )
+    # if dist.is_master_proc():
+    #     # Clear the root logger to prevent any existing logging config
+    #     # (e.g. set by another module) from messing with our setup
+    #     logging.root.handlers = []
+    #     # Construct logging configuration
+    #     logging_config = {"level": logging.INFO, "format": _FORMAT}
+    #     # Log either to stdout or to a file
+    #     if cfg.LOG_DEST == "stdout":
+    #         logging_config["stream"] = sys.stdout
+    #     else:
+    #         logging_config["filename"] = os.path.join(cfg.OUT_DIR, _LOG_FILE)
+    #     # Configure logging
+    #     logging.basicConfig(**logging_config)
+    # else:
+    #     _suppress_print()
 
 
 def get_logger(name):
